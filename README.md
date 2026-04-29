@@ -151,7 +151,7 @@ docker run -d \
   -e HOST=0.0.0.0 \
   -e PORT=8000 \
   --restart unless-stopped \
-  clockclock1/kimi2api:latest
+  ghcr.io/clockclock1/kimi2api:latest
 ```
 
 ### 环境变量
@@ -165,14 +165,12 @@ docker run -d \
 
 ## GitHub Actions 自动构建
 
-项目已配置 GitHub Actions，每次推送 `main` 分支或创建版本标签时，会自动构建并推送 Docker 镜像到 Docker Hub。
+项目已配置 GitHub Actions，每次推送 `main` 分支或创建版本标签时，会自动构建并推送 Docker 镜像到 **GitHub Packages**。
 
 ### 配置步骤
 
-1. 在 Docker Hub 创建 Access Token
-2. 在 GitHub 仓库设置 Secrets：
-   - `DOCKERHUB_USERNAME`: Docker Hub 用户名
-   - `DOCKERHUB_TOKEN`: Docker Hub Access Token
+1. 确保 GitHub 仓库已启用 GitHub Packages（默认已启用）
+2. 在 GitHub 仓库的 **Settings > Actions > General** 中，确保 Workflow permissions 设置为 `Read and write permissions`
 
 ## 注意事项
 
