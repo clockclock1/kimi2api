@@ -121,6 +121,59 @@ curl http://127.0.0.1:8000/v1/responses \
 - DRY：统一了错误格式、请求特性提取、Responses/Chat 转换和 SSE 输出逻辑
 - SOLID：客户端负责 Kimi 通信，服务端负责 OpenAI 兼容协议，两层职责分离
 
+## Docker 部署
+
+### 方式一：使用 Docker Compose（推荐）
+
+1. 创建 `.env` 文件：
+
+```env
+KIMI_TOKEN=your_kimi_jwt_token_here
+OPENAI_API_KEY=sk-kimi2api
+```
+
+2. 使用以下命令启动：
+
+```bash
+docker-compose up -d
+```
+
+服务将在 `http://localhost:8000` 启动。
+
+### 方式二：使用纯 Docker
+
+```bash
+docker run -d \
+  --name kimi2api \
+  -p 8000:8000 \
+  -e KIMI_TOKEN=your_kimi_jwt_token_here \
+  -e OPENAI_API_KEY=sk-kimi2api \
+  -e HOST=0.0.0.0 \
+  -e PORT=8000 \
+  --restart unless-stopped \
+  clockclock1/kimi2api:latest
+```
+
+### 环境变量
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| KIMI_TOKEN | - | 访问 Kimi 的真实 token（必填） |
+| OPENAI_API_KEY | sk-kimi2api | 服务端鉴权 key |
+| HOST | 127.0.0.1 | 服务绑定地址 |
+| PORT | 8000 | 服务端口 |
+
+## GitHub Actions 自动构建
+
+项目已配置 GitHub Actions，每次推送 `main` 分支或创建版本标签时，会自动构建并推送 Docker 镜像到 Docker Hub。
+
+### 配置步骤
+
+1. 在 Docker Hub 创建 Access Token
+2. 在 GitHub 仓库设置 Secrets：
+   - `DOCKERHUB_USERNAME`: Docker Hub 用户名
+   - `DOCKERHUB_TOKEN`: Docker Hub Access Token
+
 ## 注意事项
 
 - 这是基于 Kimi Web 协议的非官方实现，官方协议变更后可能需要同步修复
